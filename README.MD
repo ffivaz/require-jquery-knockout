@@ -34,7 +34,7 @@ js/
 index.html
 ```
 
-You can create the structure by yourself, or just for or pull the code from here.
+You can create the structure by yourself, or just fork or pull the code from here.
 
 ## Making RequireJS work
 I start any project with a clean `index.html` file. Something like this:
@@ -57,3 +57,5 @@ I start any project with a clean `index.html` file. Something like this:
 
 </html>
 ```
+
+The *script* line is important, it tells your browser to load the `require.js` file located in the `js` directory and tells RequireJS to load `app.js` to start the app.

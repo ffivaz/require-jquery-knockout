@@ -6,7 +6,7 @@ But first of all, some explanation is needed. I am fond of [KnockoutJS](http://k
 
 First, you'll want to structure your data, especially for big projects. The proposed structure took some advice from [Ado Kukic](https://scotch.io/tutorials/angularjs-best-practices-directory-structure#a-better-structure-and-foundation) who designed a structure for AngularJS. The structure also has to match some requisites of RequireJS. Here is the structure:
 
-'''javascript
+```javascript
 assets/
 ---- css/
 -------- lib/                    // Any third-party css (like bootstrap.css)
@@ -29,4 +29,4 @@ js/
 ---- require.js
 ---- appViewModel.js              // Not used if all your code is broken into components
 index.html
-'''
+```

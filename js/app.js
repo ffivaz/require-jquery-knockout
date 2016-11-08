@@ -4,12 +4,11 @@ requirejs.config({
         text: "text",
         jquery: "jquery",
         knockout: "knockout"
-    },
-    shim: {
-        jquery: {
-            exports: "$"
-        }
-    },
+    }
+});
+
+require(['knockout', '../appViewModel'], function(ko, appViewModel) {
+    ko.applyBindings(new appViewModel());
 });
 
 require(['knockout'], function(ko) {
@@ -17,8 +16,4 @@ require(['knockout'], function(ko) {
         viewModel: { require: "../app/components/form-name/form-name" },
         template: { require: "text!../app/components/form-name/form-name.html" }
     })
-});
-
-require(['knockout', '../appViewModel'], function(ko, appViewModel) {
-    ko.applyBindings(new appViewModel());
 });

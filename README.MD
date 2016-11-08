@@ -1,10 +1,13 @@
-# Making requirejs, jquery, and knockoutjs work together
+# Making RequireJS, JQuery, and KnockoutJS work together
 
 I found that is was a PITA to make all these work together. So here is a small guide.
 
-But first of all, some explanation is needed. I am fond of [KnockoutJS](http://knockoutjs.com). It's pure javascript, unlike other frameworks (yes, React and AngularJS 2, I'm looking at you), and the learning curve is steep in my experience. I used it for smaller projects until I hit a problem with growing projects becoming a mess. I tried other frameworks (yes, React and AngularJS 2, I'm looking at you) but came back. And I discovered that you can define [components](http://knockoutjs.com/documentation/component-overview.html). And I finally discovered [RequireJS](http://requirejs.org/) that could bring all this together, without using building tool (at first).
+But first of all, some explanation are needed. I am fond of [KnockoutJS](http://knockoutjs.com). It's pure javascript, unlike other frameworks (yes, React and AngularJS 2, I'm looking at you), and the learning curve is steep in my experience. I used it for smaller projects until I hit a problem with growing projects becoming a mess. I tried other frameworks (yes, React and AngularJS 2, I'm looking at you) but came back. And I discovered that you can define [components](http://knockoutjs.com/documentation/component-overview.html). And I finally discovered [RequireJS](http://requirejs.org/) that could bring all this together, without using building tool (at first).
 
-First, you'll want to structure your data, especially for big projects. The proposed structure took some advice from [Ado Kukic](https://scotch.io/tutorials/angularjs-best-practices-directory-structure#a-better-structure-and-foundation) who designed a structure for AngularJS. The structure also has to match some requisites of RequireJS. Here is the structure:
+## Data structure
+First, you'll want to structure your data. This is especially true for big projects but not only. In my experience, it is far more difficult to convert an existing project than to start from scratch (there is a [Udacity lesson](https://www.udacity.com/course/javascript-design-patterns--ud989) about this). In fact, this is why I wrote this document. I found myself trying to squeeze a mess (thousands lines of code, many pages using the same components, hard copied from one to anotherm etc.)
+
+The proposed structure took some advice from [Ado Kukic](https://scotch.io/tutorials/angularjs-best-practices-directory-structure#a-better-structure-and-foundation) who designed a structure for AngularJS. The structure also has to match some requisites of RequireJS. Here is the structure:
 
 ```javascript
 assets/

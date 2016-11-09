@@ -101,8 +101,9 @@ define(['knockout'], function(ko) {
 });
 ```
 
-For now, we just have to focus on the `formNameViewModel()` function (the inner function). Observations:
-* All your KnockoutJS view models *have* to begin with ```self = this```, it is the only way to use variables in functions.
+For now, we'll just focus on the `formNameViewModel()` function. Observations:
+
+* All your KnockoutJS view models *have* to begin with `self = this`, it is the only way to use variables in functions.
 * KnockoutJS uses *observables*. the `inputNameTextValue` variable is one. It stores our name (my name in this case). The variable is nound two times in html code above. In the input (`textInput`, the observable is updated each time the text in the input changes), and in the text, where the content of the observable is rendered.
 * Next comes a function. The function is triggered when the button is clicked. It sets the content of the observable to an empty string. Note that observables are functions, and you call them with their new value to update.
 

@@ -32,7 +32,7 @@ js/
 -------- text.js                  // The text.js plugin for RequireJS is used for reading knockout templates
 ---- app.js
 ---- require.js
----- appViewModel.js              // Not used if all your code is broken into components
+---- appViewModel.js              // This is where KnockoutJS code goes
 index.html
 ```
 
@@ -72,7 +72,23 @@ requirejs.config({
 
 RequireJS base url directory tells where to look for the files below. *(to be controled)* In my understanding of RequireJS, libraries like KnockoutJS are loaded only when used for the first time. Configuring the path to the files doesn't mean they are loaded and can be used. For instance, we will create our first KnockoutJS component below. If it contains some JQuery code, it won't work.
 
-Now that RequireJS works, let's move to our first KnockoutJS component.
+Now that RequireJS works, let's initialize KnockoutJS. In the `app.js` file, after the code above, write:
+
+```javascript
+require(['knockout', '../appViewModel'], function(ko, appViewModel) {
+    ko.applyBindings(new appViewModel());
+});
+```
+
+This creates the binding that launches KnockoutJS magic. The require loads `appViewModel`, which depends on `knockout`. Now we have to load the view model function in `appViewModel.js`:
+
+```javascript
+define(['knockout'], function(ko) {
+    return function appViewModel() {
+        // Put some ko code here
+    };
+});
+```
 
 ## Our first KnockoutJS component
 We will create a simple form: an input, a rendered text based on it and a clear button. The html code is simple:
@@ -100,7 +116,8 @@ define(['knockout'], function(ko) {
 });
 ```
 
-For now, we'll just focus on the `formNameViewModel()` function. KnockoutJS uses *observables*. the `inputNameTextValue` variable is one. It stores our name (my name in this case). The variable is bound two times in html code above: in the input (`textInput`, the observable is updated each time the text in the input changes), and in the text, where the content of the observable is rendered.
-* Next comes a function. The function is triggered when the button is clicked. It sets the content of the observable to an empty string. Note that observables are functions, and you call them with their new value to update.
+For now, we'll just focus on the `formNameViewModel()` function. KnockoutJS uses *observables*. the `inputNameTextValue` variable is one. It stores our name (my name in this case). The variable is bound two times in html code above: in the input (`textInput`, the observable is updated each time the text in the input changes), and in the text, where the content of the observable is rendered. Next comes a function. The function is triggered when the button is clicked. It sets the content of the observable to an empty string. Note that observables are functions, and you call them with their new value to update.
+
+Now that you have a function and a template, you have to *register* your component. Since we are using RequireJS,
 
 *To be continued...*

@@ -86,25 +86,21 @@ We will create a simple form: an input, a rendered text based on it and a clear 
 <button data-bind="click: inputNameClearClick">Clear</button>
 ```
 
-There are three components linked to KnockoutJS: the input, the text and the button (look for the `data-bind` tag). If you are not familiar with KnockoutJS, it's time to [take a tour](http://knockoutjs.com). This code will be written in the html file `form-name.html`. The other file in the directory contains the code for the different bindings.
+There are three components linked to KnockoutJS: the input, the text and the button (look for the `data-bind` tag). If you are not familiar with KnockoutJS, it's time to [take a tour](http://knockoutjs.com). This code will be written in the html file `form-name.html`. The other file in the directory `form-name.js` contains the code for the different bindings.
 
 ```javascript
 define(['knockout'], function(ko) {
     function formNameViewModel() {
-        self = this;
         this.inputNameTextValue = ko.observable('Fabien');
         this.inputNameClearClick = function() {
-            self.inputNameTextValue('');
+            this.inputNameTextValue('');
         };
     };
     return formNameViewModel;
 });
 ```
 
-For now, we'll just focus on the `formNameViewModel()` function. Observations:
-
-* All your KnockoutJS view models *have* to begin with `self = this`, it is the only way to use variables in functions.
-* KnockoutJS uses *observables*. the `inputNameTextValue` variable is one. It stores our name (my name in this case). The variable is nound two times in html code above. In the input (`textInput`, the observable is updated each time the text in the input changes), and in the text, where the content of the observable is rendered.
+For now, we'll just focus on the `formNameViewModel()` function. KnockoutJS uses *observables*. the `inputNameTextValue` variable is one. It stores our name (my name in this case). The variable is bound two times in html code above: in the input (`textInput`, the observable is updated each time the text in the input changes), and in the text, where the content of the observable is rendered.
 * Next comes a function. The function is triggered when the button is clicked. It sets the content of the observable to an empty string. Note that observables are functions, and you call them with their new value to update.
 
 *To be continued...*

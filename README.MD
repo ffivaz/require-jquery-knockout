@@ -20,9 +20,9 @@ assets/
 js/
 ---- app/
 -------- components/
------------- form-name/
----------------- form-name.html   // Template
----------------- form-name.js     // View model
+------------ color-asker/
+---------------- color-asker.html   // Template
+---------------- color-asker.js     // View model
 ------------ sidebar/
 ---------------- sidebar.html
 ---------------- sidebar.js
@@ -46,13 +46,13 @@ I start any project with a clean `index.html` file. Something like this:
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Test app</title>
+    <title>Color asker</title>
     <link rel="stylesheet" href="css/style.css">
     <script data-main="js/app" src="js/require.js"></script>
 </head>
 <body>
-    <h1>Test app</h1>
-    <p>Some text</p>
+    <h1>Color asker</h1>
+    <p>What is your favorite color?</p>
 </body>
 </html>
 ```
@@ -61,8 +61,8 @@ The *script* line is important, it tells your browser to load the `require.js` f
 
 ```javascript
 requirejs.config({
-    baseUrl: 'js/lib',
-    paths: {
+    baseUrl: "js/lib",
+    pathome texts: {
         "text": "text",
         "jquery": "jquery-1.12.4",
         "knockout": "knockout-3.4.0"
@@ -75,7 +75,7 @@ RequireJS base url directory tells where to look for the files below. *(to be co
 Now that RequireJS works, let's initialize KnockoutJS. In the `app.js` file, after the code above, write:
 
 ```javascript
-require(['knockout', '../appViewModel'], function(ko, appViewModel) {
+require(["knockout", "../appViewModel"], function(ko, appViewModel) {
     ko.applyBindings(new appViewModel());
 });
 ```
@@ -83,40 +83,71 @@ require(['knockout', '../appViewModel'], function(ko, appViewModel) {
 This creates the binding that launches KnockoutJS magic. The require loads `appViewModel`, which depends on `knockout`. Now we have to load the view model function in `appViewModel.js`:
 
 ```javascript
-define(['knockout'], function(ko) {
+define(["knockout"], function(ko) {
     return function appViewModel() {
         // Put some ko code here
     };
 });
 ```
 
-## Our first KnockoutJS component
-We will create a simple form: an input, a rendered text based on it and a clear button. The html code is simple:
+That is it. Now you can test that it works by creating some interactions. Say, an input asking for your prefered color and a simple text that takes the value in the input and writes it in the screen. Live. And we can add a button that resets the color in the input to red (it doesn't change anything if you didn't change the color in the input, to be clear). First, add three lines in your `index.html` file, in the body.
 
 ```html
-<div>
-    <label for="inputName">Please enter your name: </label>
-    <input type="text" id="inputName" placeholder="Name" data-bind="textInput: inputNameTextValue">
-</div>
-<p>Your name is <span class="text-strong" data-bind="text: inputNameTextValue"></span></p><br>
-<button data-bind="click: inputNameClearClick">Clear</button>
+<p>Enter a color: <input type="text" placeholder="color" data-bind="textInput: inputColorTextValue"></p>
+<p>You really prefer <span data-bind="text: inputColorTextValue"></span>?</p>
+<button data-bind="click: inputColorClearClick">Change</button>
 ```
 
-There are three components linked to KnockoutJS: the input, the text and the button (look for the `data-bind` tag). If you are not familiar with KnockoutJS, it's time to [take a tour](http://knockoutjs.com). This code will be written in the html file `form-name.html`. The other file in the directory `form-name.js` contains the code for the different bindings.
+There are two components linked to KnockoutJS: the input and the text (look for the `data-bind` tag). If you are not familiar with KnockoutJS, it's time to [take a tour](http://knockoutjs.com).
+
+Then put the following code in `appViewModel.js`, like that:
 
 ```javascript
-define(['knockout'], function(ko) {
-    function formNameViewModel() {
-        this.inputNameTextValue = ko.observable('Fabien');
+define(["knockout"], function(ko) {
+    return function appViewModel() {
+        this.inputColorTextValue = ko.observable("red");
+        this.inputColorClearClick = function() {
+            this.inputColorTextValue("red");
+        };
+    };
+});
+```
+
+KnockoutJS uses *observables*. the `inputNameTextValue` variable is one. It stores our favorite color. The variable is bound two times in html code above: in the input (`textInput`, the observable is updated each time the text in the input changes), and in the text, where the content of the observable is rendered. Next comes a function. The function is triggered when the button is clicked. It sets the content of the observable to the original color. Note that observables are functions, and you call them with their new value to update.
+
+Your page has now some interactive elements. Easy. What if you'll use the color form repeatedely and want to create a component?
+
+## Our first KnockoutJS component
+First, take the three lines of html code above and put them in a new file, in the components directory, name it `color-asker.html`. That file will work as a template. Create another file in the same directory, name it `color.asker.js`. It contains the code for the different bindings:
+
+```javascript
+define(["knockout"], function(ko) {
+    function colorAskerViewModel() {
+        this.inputNameTextValue = ko.observable("Fabien");
         this.inputNameClearClick = function() {
             this.inputNameTextValue('');
         };
     };
-    return formNameViewModel;
+    return colorAskerViewModel;
 });
 ```
 
-For now, we'll just focus on the `formNameViewModel()` function. KnockoutJS uses *observables*. the `inputNameTextValue` variable is one. It stores our name (my name in this case). The variable is bound two times in html code above: in the input (`textInput`, the observable is updated each time the text in the input changes), and in the text, where the content of the observable is rendered. Next comes a function. The function is triggered when the button is clicked. It sets the content of the observable to an empty string. Note that observables are functions, and you call them with their new value to update.
+Now that we have created a component. We want to use it in `index.html`. First, we'll rewrite our code in `appViewModel.js`:
+
+```javascript
+define(['knockout'], function(ko) {
+    ko.components.register("form-name", {
+        viewModel: { require: "../app/components/color-asker/color-asker" },
+        template: { require: "text!../app/components/color-asker/color-asker.html" }
+    });
+
+    return function appViewModel() {
+        // Non component code come here
+    };
+});
+```
+
+Exit the code in the `appViewModel()` function. It is now stored in a component file and called with the `ko.component.register()` function.
 
 Now that you have a function and a template, you have to *register* your component. Since we are using RequireJS,
 

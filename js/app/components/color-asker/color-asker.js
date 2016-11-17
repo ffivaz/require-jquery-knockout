@@ -1,9 +1,12 @@
-define(["knockout"], function(ko) {
-    function colorAskerViewModel() {
-        this.inputNameTextValue = ko.observable("Fabien");
-        this.inputNameClearClick = function() {
-            this.inputNameTextValue('');
+define(["jquery", "knockout"], function($, ko) {
+
+    function colorAskerBuilder() {
+        this.inputColorTextValue = ko.observable("red");
+        this.inputColorClearClick = function() {
+            this.inputColorTextValue('red');
         };
-    };
-    return colorAskerViewModel;
+        $('.color-text').css('color', this.inputColorTextValue());
+    }
+
+    return colorAskerBuilder;
 });

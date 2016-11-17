@@ -113,7 +113,7 @@ define(["knockout"], function(ko) {
 });
 ```
 
-KnockoutJS uses *observables*. the `inputNameTextValue` variable is one. It stores our favorite color. The variable is bound two times in html code above: in the input (`textInput`, the observable is updated each time the text in the input changes), and in the text, where the content of the observable is rendered. Next comes a function. The function is triggered when the button is clicked. It sets the content of the observable to the original color. Note that observables are functions, and you call them with their new value to update.
+KnockoutJS uses *observables*. The `inputColorTextValue` variable is one. It stores our favorite color. The variable is bound two times in html code above: in the input (`textInput`, the observable is updated each time the text in the input changes), and in the text, where the content of the observable is rendered. Next comes a function. The function is triggered when the button is clicked. It sets the content of the observable to the original color. Note that observables are functions, and you call them with their new value to update.
 
 Your page has now some interactive elements. Easy. What if you'll use the color form repeatedely and want to create a component?
 
@@ -123,11 +123,11 @@ First, take the three lines of html code above and put them in a new file, in th
 ```javascript
 define(["knockout"], function(ko) {
     function colorAskerViewModel() {
-        this.inputNameTextValue = ko.observable("Fabien");
-        this.inputNameClearClick = function() {
-            this.inputNameTextValue('');
+        this.inputColorTextValue = ko.observable("red");
+        this.inputColorClearClick = function() {
+            this.inputColorTextValue('red');
         };
-    };
+    }
     return colorAskerViewModel;
 });
 ```
@@ -147,8 +147,31 @@ define(['knockout'], function(ko) {
 });
 ```
 
-Exit the code in the `appViewModel()` function. It is now stored in a component file and called with the `ko.component.register()` function.
+Exit the code in the `appViewModel()` function. It is now stored in a component file and called with the `ko.component.register()` function. Now that you have a function and a template, you have to *register* your component. And you can add your component to your HTML code, like that:
 
-Now that you have a function and a template, you have to *register* your component. Since we are using RequireJS,
+```html
+<color-asker></color-asker>
+```
+
+Note that components are loaded asynchronously. I can lead to some of your content (fix content, that is, content you have in your HTML code) to move around your page when components are loaded and added to your page.
+
+## And jQuery?
+Now that you have a working component, you maybe want to use jQuery to change your component. Say, you want to change the color of the text, according to the color you entered (if it exists as a text color. TODO: Add link). First we change our component html template and add a class to our dynamic `<span>` text:
+
+```html
+<p>You really prefer <span class="color-text" data-bind="text: inputColorTextValue"></span>?</p>
+```
+
+Then, we can change our component's javascript code in the :
+
+```javascript
+$('.color-text').css('color', this.inputColorTextValue());
+```
+
+If your try to run this code, it won't work, throwing an error `Uncaught ReferenceError: $ is not defined(…)`. Why? Because we didn't tell RequireJS to load jQuery with the component. The `define` function at the top of the function has to be changed to:
+
+```javascript
+define(["jquery", "knockout"], function($, ko) {
+```
 
 *To be continued...*
